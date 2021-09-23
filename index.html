@@ -1,56 +1,40 @@
 <!-- Import Sigma JS -->
-<script src="libs/sigma.min.js"></script>
-<script src="libs/sigma.layout.forceAtlas2.min.js"></script>
-<script src="libs/sigma.parsers.json.min.js"></script>
 
+<link rel="stylesheet" href="public/style/style.css">
 <!-- Add some CSS so we can see the graph! -->
-<style>
-  #network-graph {
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    position: absolute;
-  }
-</style>
 
 <!-- A placeholder for the graph -->
 <div id="network-graph"></div>
 
 <!-- The most basic usage of the Sigma JSON parser -->
-<script>
-function getParameterByName(name) {
-  var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
-  return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
-};
 
-sigma.parsers.json( "/data/network.json",
+<!DOCTYPE HTML>
+<html>
+ <head>
+    <meta charset="utf-8">
+    <title>graph</title>
+    <script src="libs/sigma.min.js"></script>
+    <script src="libs/sigma.layout.forceAtlas2.min.js"></script>
+    <script src="libs/sigma.parsers.json.min.js"></script>
+ </head>
+ <body>
+    <form id="form-create">
+        <h2>Добавление вершины</h2>
+        <input type="text" placeholder="Имя точки" id="name-create" >
+        <input type="text" placeholder="Значение x" id="x-create">
+        <input type="text" placeholder="Значение y" id="y-create">
+        <input type="submit" id="button-create">
+    </form>
+    <form id="edge-create">
+        <h2>Добавление ребер</h2>
+        <input type="text" placeholder="id первой точки" id="first-dodge" >
+        <input type="text" placeholder="id второй точки" id="second-dodge">
+        <input type="submit" id="edge-button">
+    </form>
+    <button id="create-graph">Создать граф</button>
 
-  {container: 'network-graph'},
 
-  function(s) {
-    nodeId = parseInt(getParameterByName('node_id'));
+    <script src="public/display.js"></script>
+ </body>
+</html>
 
-    var selectedNode;
-
-    s.graph.nodes().forEach(function(node, i, a) {
-      if (node.id == nodeId) {
-        selectedNode = node;
-        return;
-      }
-    });
-
-    s.graph.nodes().forEach(function(node, i, a) {
-      node.x = Math.cos(Math.PI * 2 * i / a.length);
-      node.y = Math.sin(Math.PI * 2 * i / a.length);
-    });
-
-    s.refresh();
-
-    s.startForceAtlas2();
-
-    if (selectedNode != undefined){
-      s.cameras[0].goTo({x:selectedNode['read_cam0:x'],y:selectedNode['read_cam0:y'],ratio:0.1});
-    }
-  });
-</script>
